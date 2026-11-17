@@ -23,7 +23,9 @@ def repl(mo):
             im = im.resize((round(im.size[0]*k), round(im.size[1]*k)), Image.LANCZOS)
         q = 82 if name.startswith('hero') else 72
         im.save(os.path.join(IMG, name + '.webp'), 'WEBP', quality=q, method=6)
-        sm = im.copy()
+        # если рядом лежит отдельный кадр для телефона - берём его
+        mob_src = os.path.join(BASE, 'фото', name + '-mobile.jpg')
+        sm = Image.open(mob_src).convert('RGB') if os.path.exists(mob_src) else im.copy()
         if max(sm.size) > 620:
             k = 620 / max(sm.size)
             sm = sm.resize((round(sm.size[0]*k), round(sm.size[1]*k)), Image.LANCZOS)
